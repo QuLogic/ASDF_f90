@@ -129,6 +129,47 @@ install(FILES README.md
         DESTINATION ${CMAKE_INSTALL_DOCDIR})
 
 ############################################################
+### Helpers for Downstream Users                         ###
+############################################################
+
+# pkg-config
+set(PKG_CONFIG_REQUIRES "")
+set(PKG_CONFIG_REQUIRES_PRIVATE "")
+
+set(PKG_CONFIG_CFLAGS "-I\${prefix}/\${includedir} ${HDF5_INCLUDE_DIR}")
+set(PKG_CONFIG_LIBS "-L\${prefix}/\${libdir} -lasdf")
+string(REPLACE ";" " " PKG_CONFIG_LIBS_PRIVATE
+       "${HDF5_LIBRARIES}")
+
+configure_file(
+  "${CMAKE_CURRENT_SOURCE_DIR}/pkg-config.pc.in"
+  "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}.pc"
+)
+
+install(FILES "${CMAKE_BINARY_DIR}/${PROJECT_NAME}.pc"
+        DESTINATION ${CMAKE_INSTALL_LIBDIR}/pkgconfig)
+
+# CMake
+include(CMakePackageConfigHelpers)
+
+configure_package_config_file(
+  "${CMAKE_CURRENT_SOURCE_DIR}/config.cmake.in"
+  "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}Config.cmake"
+  INSTALL_DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/asdf"
+  PATH_VARS ${PROJECT_NAME}_INCLUDE_DIR ${PROJECT_NAME}_LIBRARY_DIR
+)
+
+write_basic_package_version_file(
+  "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}ConfigVersion.cmake"
+  VERSION 0.0.1 #${PROJECT_VERSION}
+  COMPATIBILITY SameMajorVersion)
+
+install(FILES
+        "${CMAKE_BINARY_DIR}/${PROJECT_NAME}Config.cmake"
+        "${CMAKE_BINARY_DIR}/${PROJECT_NAME}ConfigVersion.cmake"
+        DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/asdf)
+
+############################################################
 if (TEST)
   include(CTest)  # enable_testing() is not enough to 'make test'
   add_subdirectory(test)

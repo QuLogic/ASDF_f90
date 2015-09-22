@@ -25,7 +25,7 @@
 #include <hdf5.h>
 
 #include "ASDF_read.h"
-#include "ASDF_common.h"
+#include "private/common.h"
 
 hid_t ASDF_open_read_only(const char *filename, MPI_Comm comm) {
    hid_t plist_id, file_id;

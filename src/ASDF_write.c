@@ -26,8 +26,8 @@
 #define H5Gcreate_vers 2
 #include <hdf5.h>
 
-#include "ASDF_common.h"
 #include "ASDF_write.h"
+#include "private/common.h"
 
 hid_t ASDF_create_new_file(const char *filename, MPI_Comm comm) {
   hid_t plist_id, file_id;

@@ -14,12 +14,19 @@
  * limitations under the License.
  *****************************************************************************/
 /**
- * @file ASDF_common.h
+ * @file private/common.h
  * @brief
  * @author Matthieu Lefebvre
  */
 
-#ifndef _ASDF_COMMON_H_
-#define _ASDF_COMMON_H_
+#ifndef _ASDF_PRIVATE_COMMON_H_
+#define _ASDF_PRIVATE_COMMON_H_
+
+#define CHK_H5(X) \
+    do { \
+        int ret__ = (X); \
+        if (ret__ < 0) \
+            return ret__; \
+    } while (0)
 
 #endif

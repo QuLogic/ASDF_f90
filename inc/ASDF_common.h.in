@@ -22,4 +22,6 @@
 #ifndef _ASDF_COMMON_H_
 #define _ASDF_COMMON_H_
 
+#define ASDF_VERSION "@ASDF_VERSION@"
+
 #endif

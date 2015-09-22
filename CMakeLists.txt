@@ -2,6 +2,10 @@ cmake_minimum_required (VERSION 2.8.7)
 
 ############################################################
 project (ASDF)
+set(ASDF_VERSION 0.0.1)
+# The following version should be bumped if the ABI changes. It does
+# *not* need to stay in sync with the "display" version above.
+set(ASDF_SOVERSION 0.0.1)
 
 include(GNUInstallDirs)
 
@@ -59,13 +63,20 @@ add_library (asdf
              ${SRC_DIR}/ASDF_f.c)
 
 target_link_libraries(asdf
-		      ${HDF5_LIBRARIES} ${MPI_C_LIBRARIES})
+                      ${HDF5_LIBRARIES} ${MPI_C_LIBRARIES})
+
+set_property(TARGET asdf PROPERTY VERSION ${ASDF_VERSION})
+set_property(TARGET asdf PROPERTY SOVERSION ${ASDF_SOVERSION})
+
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/inc/ASDF_common.h.in
+               ${CMAKE_BINARY_DIR}/inc/ASDF_common.h
+               @ONLY)
 
 install(TARGETS asdf
         LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
         ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR})
 file(GLOB inc_files inc/*.h)
-install(FILES ${inc_files}
+install(FILES ${inc_files} ${CMAKE_BINARY_DIR}/inc/ASDF_common.h
         DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
 
 if (${CMAKE_VERSION} VERSION_GREATER 3.1)
